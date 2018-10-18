@@ -100,7 +100,7 @@ class Constants {
         game: '$help',
         prefix: '$',
         botOwners: ['Luner#0059', 'Ash#8999'],
-        ownerIds: ['226736342745219072', '271424970796564490']
+        ownerIds: ['289976550726828042', '271424970796564490']
       },
 
       regexes: {
