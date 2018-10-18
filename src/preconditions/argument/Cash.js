@@ -11,7 +11,7 @@ class Cash extends patron.ArgumentPrecondition {
   async run(command, msg, argument, args, value) {
     const realValue = NumberUtil.realValue(msg.dbUser.cash);
 
-    if (argument.type === 'cash' && argument.typeReader.inputtedAll) {
+    if (command.names[0] === 'rob' && argument.typeReader.inputtedAll) {
       value = args[argument.name + '-all'];
     }
 
