@@ -149,7 +149,7 @@ class Constants {
         },
         convoy: {
           cost: 25000,
-          description: 'A fleet of ships will help distribute your drugs even faster, reducing all of your cooldowns by 5%.'
+          description: 'A fleet of ships will help distribute your drugs even faster, reducing all of your cooldowns by 10%.'
         },
         snowcap: {
           cost: 50000,
