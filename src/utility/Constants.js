@@ -28,7 +28,7 @@ class Constants {
       },
 
       links: {
-        botInvite: 'https://discordapp.com/oauth2/authorize?client_id=496520437514371072&scope=bot&permissions=8',
+        botInvite: 'https://discordapp.com/oauth2/authorize?client_id=502598213790990336&scope=bot&permissions=8',
         serverInvite: 'https://discord.gg/usXDFN4'
       },
 
