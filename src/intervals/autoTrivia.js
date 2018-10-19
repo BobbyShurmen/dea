@@ -20,11 +20,13 @@ module.exports = async client => {
       }
 
       const question = Random.arrayElement(questions);
-      const answer = guilds[i].trivia[question];
+      const answer = guilds[i].trivia[question].toLowerCase();
 
       await guild.mainChannel.createMessage(question, { title: 'Trivia!' });
 
-      const result = await guild.mainChannel.awaitMessages(m => m.content.toLowerCase().includes(answer.toLowerCase()), { time: 90000, max: 1 });
+      const answers = Object.values(guilds[i].trivia);
+      const fn = m => m.content.toLowerCase().includes(answer) && answers.filter(x => m.content.toLowerCase().includes(answer)).length <= 3;
+      const result = await guild.mainChannel.awaitMessages(fn, { time: 90000, max: 1 });
 
       if (result.size >= 1) {
         const prize = Random.nextInt(500, 2500);
