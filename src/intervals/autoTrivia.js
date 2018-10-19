@@ -25,7 +25,7 @@ module.exports = async client => {
       await guild.mainChannel.createMessage(question, { title: 'Trivia!' });
 
       const answers = Object.values(guilds[i].trivia);
-      const fn = m => m.content.toLowerCase().includes(answer) && answers.filter(x => x.toLowerCase().includes(answer)).length <= 3;
+      const fn = m => m.content.toLowerCase().includes(answer) && answers.filter(x => m.content.toLowerCase().includes(x.toLowerCase())).length <= 3;
       const result = await guild.mainChannel.awaitMessages(fn, { time: 90000, max: 1 });
 
       if (result.size >= 1) {
