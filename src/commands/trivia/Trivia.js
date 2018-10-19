@@ -20,11 +20,11 @@ class Trivia extends patron.Command {
 
     const question = Random.arrayElement(questions);
     const answer = msg.dbGuild.trivia[question].toLowerCase();
-    
+
     await msg.channel.createMessage(question, { title: 'Trivia!' });
     const answers = Object.values(msg.dbGuild.trivia);
     const fn = m => m.content.toLowerCase().includes(answer) && answers.filter(x => x.toLowerCase().includes(answer)).length <= 3;
-      
+
     const result = await msg.channel.awaitMessages(fn, { time: 90000, max: 1 });
 
     if (result.size >= 1) {

@@ -44,7 +44,7 @@ class UserRepository extends BaseRepository {
   async modifyCash(dbGuild, member, change) {
     const newDbUser = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncMoneyUpdate('cash', change));
 
-    RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
+    await RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
 
     return newDbUser;
   }
@@ -52,15 +52,7 @@ class UserRepository extends BaseRepository {
   async modifyCashExact(dbGuild, member, change) {
     const newDbUser = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncPointsUpdate('cash', change));
 
-    RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
-
-    return newDbUser;
-  }
-
-  async modifyPoints(dbGuild, member, change) {
-    const newDbUser = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncPointsUpdate('points', change));
-
-    RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
+    await RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
 
     return newDbUser;
   }
@@ -68,20 +60,9 @@ class UserRepository extends BaseRepository {
   async modifyBounty(dbGuild, member, change) {
     const newDbUser = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncMoneyUpdate('bounty', change));
 
-    RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
+    await RankService.handle(newDbUser, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
 
     return newDbUser;
-  }
-
-  async modifyCashAndPointsExact(dbGuild, member, changeCash, changePoints) {
-    const newDbUserCash = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncPointsUpdate('cash', changeCash));
-    const newDbUserPoints = await this.findUserAndUpsert(member.id, dbGuild.guildId, new IncPointsUpdate('points', changePoints));
-
-    RankService.handle(newDbUserCash, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
-    RankService.handle(newDbUserPoints, dbGuild, member, await this.findMany({ guildId: dbGuild.guildId }));
-
-    await newDbUserCash;
-    return newDbUserPoints;
   }
 
   deleteUser(userId, guildId) {
