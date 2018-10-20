@@ -1,4 +1,5 @@
 const patron = require('patron.js');
+const PromiseUtil = require('../../utility/PromiseUtil.js');
 
 class Questions extends patron.Command {
   constructor() {
@@ -22,6 +23,8 @@ class Questions extends patron.Command {
 
       if (description.length > 1024) {
         await msg.author.tryDM(description, { title: 'Trivia Questions' });
+        await PromiseUtil.delay(2000);
+
         description = '';
       }
     }

@@ -1,4 +1,5 @@
 const patron = require('patron.js');
+const PromiseUtil = require('../../utility/PromiseUtil.js');
 
 class Polls extends patron.Command {
   constructor() {
@@ -22,6 +23,7 @@ class Polls extends patron.Command {
 
       if (i === 20) {
         await msg.author.DMFields(['Polls For Server: ' + msg.guild.name, '```\n' + message + '```'], false);
+        await PromiseUtil.delay(2000);
 
         message = '';
       }
