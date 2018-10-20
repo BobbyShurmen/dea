@@ -98,13 +98,21 @@ class ItemService {
 
   async takeInv(killerId, deadUserId, guildId, db) {
     const dbUser = await db.userRepo.getUser(deadUserId, guildId);
+    const keys = Object.keys(dbUser.inventory);
 
-    for (const key in dbUser.inventory) {
-      const itemsGained = 'inventory.' + key;
-      const amount = dbUser.inventory[key];
-
-      await db.userRepo.updateUser(killerId, guildId, { $inc: { [itemsGained]: amount } });
+    if (!keys.length) {
+      return;
     }
+
+    const items = {
+      $inc: keys.reduce((a, b) => {
+        a['inventory.' + b] = dbUser.inventory[b];
+
+        return a;
+      }, {})
+    };
+
+    return db.userRepo.updateUser(killerId, guildId, items);
   }
 
   capitializeWords(str) {

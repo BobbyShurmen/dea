@@ -223,12 +223,6 @@ class Constants {
         maxLength: 14
       },
 
-      nsfw: {
-        max: 20,
-        min: 1,
-        cooldown: 60000
-      },
-
       chill: {
         max: 3600,
         min: 5,

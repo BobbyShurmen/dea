@@ -5,7 +5,7 @@ class Blacklist extends patron.Command {
     super({
       names: ['blacklist'],
       groupName: 'botowners',
-      description: 'Blacklists user from your server, but doesn\'t ban him.',
+      description: 'Blacklists a user.',
       args: [
         new patron.Argument({
           name: 'user',

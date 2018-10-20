@@ -30,7 +30,9 @@ class CreatePoll extends patron.Command {
           key: 'days',
           type: 'float',
           example: '4',
-          defaultValue: 1
+          defaultValue: 1,
+          preconditionOptions: [{ maximum: 7 }, { minimum: 1 }],
+          preconditions: ['maximum', 'minimum']
         }),
         new patron.Argument({
           name: 'elder only',
