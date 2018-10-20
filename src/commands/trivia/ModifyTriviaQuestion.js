@@ -6,6 +6,7 @@ class ModifyTriviaQuestion extends patron.Command {
       names: ['modifytriviaquestion', 'modifytrivia', 'modtrivia', 'modquestion'],
       groupName: 'owners',
       description: 'Modifies a trivia question.',
+      preconditions: ['administrator'],
       args: [
         new patron.Argument({
           name: 'question',

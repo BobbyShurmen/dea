@@ -162,7 +162,8 @@ class Constants {
         elderTimeRequired: 172800000,
         maxAnswers: 6,
         maxAnswerChar: 40,
-        maxChar: 40
+        maxChar: 40,
+        maxPerGuild: 50
       },
 
       stab: {

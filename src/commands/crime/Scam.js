@@ -14,11 +14,15 @@ class Scam extends patron.Command {
   }
 
   async run(msg) {
-    const prize = Random.nextFloat(Constants.config.scam.min, Constants.config.scam.max);
+    if (Random.roll() < Constants.config.scam.odds) {
+      const prize = Random.nextFloat(Constants.config.scam.min, Constants.config.scam.max);
 
-    await msg.client.db.userRepo.modifyCash(msg.dbGuild, msg.member, prize);
+      await msg.client.db.userRepo.modifyCash(msg.dbGuild, msg.member, prize);
 
-    return msg.createReply(Random.arrayElement(Constants.data.messages.scam).format(prize.USD()));
+      return msg.createReply(Random.arrayElement(Constants.data.messages.scam).format(prize.USD()));
+    }
+
+    return msg.createErrorReply('you waited in line for some new Adidas Yeezys, bought 10 just to realise they were fake!.');
   }
 }
 

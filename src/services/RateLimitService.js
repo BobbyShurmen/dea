@@ -18,8 +18,10 @@ class RateLimitService {
           for (let i = 0; i < botOwners.length; i++) {
             const botOwner = msg.client.users.get(botOwners[i]);
 
-            await botOwner.tryDM(msg.author.toString() + ' (' + msg.author.id + ') was blacklisted.\nGuild: ' + msg.guild.name +
-              ' (' + msg.guild.id + ')\nChannel: ' + msg.channel.name + ' (' + msg.channel.id + ')\nContent: ' + msg.content);
+            if (botOwner !== undefined) {
+              await botOwner.tryDM(msg.author.toString() + ' (' + msg.author.id + ') was blacklisted.\n**Guild:** ' + msg.guild.name +
+              ' (' + msg.guild.id + ')\n**Channel:** ' + msg.channel.name + ' (' + msg.channel.id + ')\n**Content:** ' + msg.content);
+            }
           }
 
           await msg.createReply('you were automatically blacklisted for rate-limiting.');

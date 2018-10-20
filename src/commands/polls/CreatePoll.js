@@ -64,6 +64,8 @@ class CreatePoll extends patron.Command {
       return msg.createErrorReply('only moderator\'s may create moderator only polls.');
     } else if (choices.length > Constants.config.polls.maxAnswers) {
       return msg.createErrorReply('you may not have more than ' + Constants.config.polls.maxAnswers + ' answers on your poll.');
+    } else if ((await msg.client.db.pollRepo.findMany({ guildId: msg.guild.id })).length > Constants.config.polls.maxPerGuild) {
+      return msg.createErrorReply('you may not have more than ' + Constants.config.polls.maxPerGuild + ' polls in the guild at once.');
     }
 
     for (let i = 0; i < choices.length; i++) {

@@ -14,11 +14,15 @@ class Jump extends patron.Command {
   }
 
   async run(msg) {
-    const prize = Random.nextFloat(Constants.config.jump.min, Constants.config.jump.max);
+    if (Random.roll() < Constants.config.jump.odds) {
+      const prize = Random.nextFloat(Constants.config.jump.min, Constants.config.jump.max);
 
-    await msg.client.db.userRepo.modifyCash(msg.dbGuild, msg.member, prize);
+      await msg.client.db.userRepo.modifyCash(msg.dbGuild, msg.member, prize);
+  
+      return msg.createReply(Random.arrayElement(Constants.data.messages.jump).format(prize.USD()));
+    }
 
-    return msg.createReply(Random.arrayElement(Constants.data.messages.jump).format(prize.USD()));
+    return msg.createErrorReply('you pulled out infront of someone on the street then they got out and jumped your dumbass with a crowbar!');
   }
 }
 

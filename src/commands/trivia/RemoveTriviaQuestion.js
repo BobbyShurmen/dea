@@ -6,7 +6,7 @@ class RemoveTriviaQuestion extends patron.Command {
       names: ['removetriviaquestion', 'removetrivia', 'removequestion'],
       groupName: 'trivia',
       description: 'Remove a trivia question.',
-      preconditions: ['moderator'],
+      preconditions: ['administrator'],
       args: [
         new patron.Argument({
           name: 'question',
