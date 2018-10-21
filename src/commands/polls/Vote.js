@@ -34,6 +34,8 @@ class Vote extends patron.Command {
       return msg.createErrorReply('you may not vote on this poll until you\'ve been in this server for ' + elderDays + ' days.');
     } else if (args.poll.modOnly && ModerationService.getPermLevel(msg.dbGuild, msg.member) < 1) {
       return msg.createErrorReply('you may only vote on this poll if you\'re a moderator.');
+    } else if (args.poll.choices[args.choice].voters.includes(msg.author.id)) {
+      return msg.createErrorReply('you may not vote on the same choice twice.');
     }
 
     let votedChoice;
