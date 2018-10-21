@@ -23,7 +23,7 @@ class RemovePoll extends patron.Command {
       return msg.createErrorReply('you\'re not the creator of this poll.');
     }
 
-    await msg.client.db.pollRepo.deletePoll(args.poll.name, args.poll.creatorId, msg.guild.id);
+    await msg.client.db.guildRepo.updateGuild(msg.guild.id, { $pull: { 'polls': args.poll }});
 
     return msg.createReply('successfully destroyed your poll ' + args.poll.name.boldify() + '.');
   }

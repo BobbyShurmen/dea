@@ -2,7 +2,7 @@ const patron = require('patron.js');
 const Constants = require('../../utility/Constants.js');
 const NumberUtil = require('../../utility/NumberUtil.js');
 const ModerationService = require('../../services/ModerationService.js');
-const PollService = require('../../services/PollService.js');
+const poll = require('../../structures/poll.js');
 
 class CreatePoll extends patron.Command {
   constructor() {
@@ -54,19 +54,20 @@ class CreatePoll extends patron.Command {
   }
 
   async run(msg, args) {
-    const poll = await msg.client.db.pollRepo.findOne({ $and: [{ guildId: msg.guild.id }, { name: args.name }] });
     const days = NumberUtil.daysToMs(args.days);
     const choices = args.choices.split('~');
 
-    if (poll) {
+    if (msg.dbGuild.polls.find(x => x.name === args.name)) {
       return msg.createErrorReply('there\'s already a poll with this name.');
     } else if (args.modsOnly && ModerationService.getPermLevel(msg.dbGuild, msg.member) < 1) {
       return msg.createErrorReply('only moderator\'s may create moderator only polls.');
     } else if (choices.length > Constants.config.polls.maxAnswers) {
       return msg.createErrorReply('you may not have more than ' + Constants.config.polls.maxAnswers + ' answers on your poll.');
-    } else if ((await msg.client.db.pollRepo.findMany({ guildId: msg.guild.id })).length > Constants.config.polls.maxPerGuild) {
+    } else if (msg.dbGuild.polls.length > Constants.config.polls.maxPerGuild) {
       return msg.createErrorReply('you may not have more than ' + Constants.config.polls.maxPerGuild + ' polls in the guild at once.');
     }
+
+    const choicesObj = {};
 
     for (let i = 0; i < choices.length; i++) {
       if (choices[i + 1] == choices[i]) {
@@ -74,17 +75,15 @@ class CreatePoll extends patron.Command {
       } else if (choices[i].length > Constants.config.polls.maxAnswerChar) {
         return msg.createErrorReply('you may not have more than ' + Constants.config.polls.maxAnswerChar + ' characters in your answer.');
       }
+
+      choicesObj[choices[i]] = {
+        voters: []
+      }
     }
 
-    const newIndex = await PollService.findLatestPoll(msg.guild.id, msg.client.db);
+    const pollIndex = msg.dbGuild.polls.length + 1;
 
-    await msg.client.db.pollRepo.insertPoll(newIndex, args.name, msg.author.id, msg.guild.id, days, args.eldersOnly, args.modsOnly);
-
-    for (let i = 0; i < choices.length; i++) {
-      const makeChoice = 'choices.' + choices[i];
-
-      await msg.client.db.pollRepo.updatePoll(args.name, msg.author.id, msg.guild.id, { $set: { [makeChoice]: 0 } });
-    }
+    await msg.client.db.guildRepo.upsertGuild(msg.guild.id, { $push: { 'polls': new poll(pollIndex, args.name, msg.author.id, choicesObj, days, args.eldersOnly, args.modsOnly) } });
 
     return msg.createReply('you\'ve successfully created a poll with the name ' + args.name.boldify() + '.');
   }

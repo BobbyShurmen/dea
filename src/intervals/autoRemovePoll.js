@@ -2,36 +2,48 @@ const Constants = require('../utility/Constants.js');
 
 module.exports = async client => {
   client.setInterval(async () => {
-    const polls = await client.db.pollRepo.findMany();
+    const guilds = await client.db.guildRepo.findMany();
 
-    for (let i = 0; i < polls.length; i++) {
-      const pollLength = polls[i].length;
-      const pollCreatedAt = polls[i].createdAt;
-      let choices = '';
-
-      if (Date.now() - pollCreatedAt - pollLength <= 0) {
+    for (let i = 0; i < guilds.length; i++) {
+      if (guilds[i].polls.length <= 0) {
         continue;
       }
 
-      await client.db.pollRepo.deleteById(polls[i]._id);
+      const polls = guilds[i].polls;
 
-      const guild = client.guilds.get(polls[i].guildId);
+      for (let j = 0; j < polls.length; j++) {
+        const pollLength = polls[i].length;
+        const pollCreatedAt = polls[i].createdAt;
+        let choices = '';
+  
+        if (Date.now() - pollCreatedAt - pollLength <= 0) {
+          continue;
+        }
 
-      if (!guild) {
-        continue;
+        const guild = client.guilds.get(guilds[i].guildId);
+  
+        if (!guild) {
+          continue;
+        }
+
+        const index = 'polls.' + (polls[i].index - 1);
+
+        console.log(index);
+
+        await client.db.guildRepo.updateGuild(guild.id, { $pull: { 'polls': polls[i] }});
+  
+        const creator = guild.member(polls[i].creatorId);
+  
+        if (!creator) {
+          continue;
+        }
+  
+        for (const key in polls[i].choices) {
+          choices += '`' + key + '` Votes: ' + polls[i].choices[key].voters.length + ',\n';
+        }
+  
+        await creator.user.tryDM(choices + 'Final Poll Results Of ' + polls[i].name + ' Poll In Server ' + guild.name + '.');
       }
-
-      const creator = guild.member(polls[i].creatorId);
-
-      if (!creator) {
-        continue;
-      }
-
-      for (const key in polls[i].choices) {
-        choices += '`' + key + '` Votes: ' + polls[i].choices[key] + ',\n';
-      }
-
-      await creator.user.tryDM(choices + 'Final Poll Results Of ' + polls[i].name + ' Poll In Server ' + guild.name + '.');
     }
   }, Constants.config.intervals.autoRemovePoll);
 };

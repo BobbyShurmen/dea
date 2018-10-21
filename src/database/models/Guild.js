@@ -19,6 +19,7 @@ class Guild {
     };
     this.autoTrivia = false;
     this.trivia = {};
+    this.polls = [];
     this.regenHealth = 5;
   }
 }

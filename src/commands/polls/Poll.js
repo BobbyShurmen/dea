@@ -34,7 +34,7 @@ class Poll extends patron.Command {
     }
 
     for (const key in args.poll.choices) {
-      choices += choiceNum++ + '. ' + key + ': ' + args.poll.choices[key] + ',\n';
+      choices += '**' + choiceNum++ + '**. ' + key + ': ' + args.poll.choices[key].voters.length + ',\n';
     }
 
     return msg.channel.createMessage('**Index:** ' + args.poll.index + '\n**Creator:** ' + creator + '\n**Answers:** \n' + choices.substring(0, choices.length - 2) + '\n**Ending:** ' + timeLeft.days + ' days, ' + timeLeft.hours + ' hours, ' + timeLeft.minutes + ' minutes, ' + timeLeft.seconds + ' seconds\n**Elder Only:** ' + (args.poll.elderOnly ? 'Yes' : 'No') + '\n**Mod Only:** ' + (args.poll.modOnly ? 'Yes' : 'No'), { title: args.poll.name });

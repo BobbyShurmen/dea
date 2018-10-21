@@ -6,7 +6,7 @@ class PollTypeReader extends patron.TypeReader {
   }
 
   async read(command, message, argument, args, input) {
-    const poll = await message.client.db.pollRepo.findOne({ guildId: message.guild.id, index: Number.parseFloat(input) });
+    const poll = await message.dbGuild.polls.find(x => x.index === Number.parseInt(input));
 
     if (poll) {
       return patron.TypeReaderResult.fromSuccess(poll);
