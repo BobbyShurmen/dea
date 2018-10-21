@@ -26,10 +26,6 @@ module.exports = async client => {
           continue;
         }
 
-        const index = 'polls.' + (polls[i].index - 1);
-
-        console.log(index);
-
         await client.db.guildRepo.updateGuild(guild.id, { $pull: { 'polls': polls[i] }});
   
         const creator = guild.member(polls[i].creatorId);
